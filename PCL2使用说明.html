@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCL2 使用说明 · Plain Craft Launcher 2</title>
+<meta name="description" content="PCL2 我的世界启动器使用说明：下载、安装、登录与启动的完整步骤。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Crect x='16' y='16' width='32' height='32' rx='8' fill='%2338bdf8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;display=swap">
+<style>
+:root{
+  --bg-0:#070b16;
+  --bg-1:#0b1226;
+  --bg-2:#0d1b33;
+  --blue:#2d7dff;
+  --cyan:#38bdf8;
+  --violet:#7c6cf0;
+  --text:#eaf0ff;
+  --text-2:#a2b3d8;
+  --text-3:#6d7ea6;
+  --card:rgba(20,32,58,.55);
+  --card-line:rgba(120,160,255,.14);
+  --radius:16px;
+  --shadow:0 18px 50px rgba(2,6,20,.45);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:linear-gradient(165deg,var(--bg-0) 0%,var(--bg-1) 48%,var(--bg-2) 100%);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(60% 45% at 50% -5%, rgba(45,125,255,.22), transparent 70%),
+    radial-gradient(40% 35% at 85% 20%, rgba(56,189,248,.12), transparent 70%),
+    radial-gradient(45% 40% at 12% 75%, rgba(124,108,240,.14), transparent 70%);
+}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;will-change:transform}
+.orb-1{width:560px;height:560px;left:-140px;top:-120px;background:radial-gradient(circle at 35% 35%,rgba(45,125,255,.55),rgba(45,125,255,0) 70%);animation:drift1 34s var(--ease) infinite alternate}
+.orb-2{width:520px;height:520px;right:-160px;top:22%;background:radial-gradient(circle at 60% 40%,rgba(56,189,248,.45),rgba(56,189,248,0) 70%);animation:drift2 42s var(--ease) infinite alternate}
+.orb-3{width:600px;height:600px;left:8%;bottom:-240px;background:radial-gradient(circle at 50% 40%,rgba(124,108,240,.42),rgba(124,108,240,0) 70%);animation:drift3 50s var(--ease) infinite alternate}
+@keyframes drift1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(90px,70px,0) scale(1.12)}}
+@keyframes drift2{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-80px,-60px,0) scale(.92)}}
+@keyframes drift3{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(60px,-90px,0) scale(1.1)}}
+.bg-grid{
+  position:absolute;inset:-2px;
+  background:
+    repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(90deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px);
+  animation:gridMove 60s linear infinite;
+  mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+}
+@keyframes gridMove{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
+.star{position:absolute;border-radius:50%;background:#cfe4ff;opacity:0;animation:twinkle var(--d) ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:0}to{opacity:.9}}
+.nav{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:22px 28px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:900;font-size:20px;letter-spacing:.5px}
+.brand-mark{
+  width:26px;height:26px;border-radius:7px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 0 18px rgba(45,125,255,.55);
+  display:inline-block;
+  transition:transform .35s var(--ease);
+}
+.brand:hover .brand-mark{transform:rotate(12deg) scale(1.06)}
+.nav-links{display:flex;gap:22px}
+.nav-link{color:var(--text-2);text-decoration:none;font-size:15px;font-weight:500;position:relative;padding:6px 2px;transition:color .25s}
+.nav-link::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-link:hover{color:var(--text)}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-link.active{color:var(--text)}
+main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:64px 28px 0}
+/* ===== 页头 ===== */
+.page-head{text-align:center;padding:16px 0 48px}
+.page-title{
+  font-size:clamp(1.9rem,5.5vw,3.2rem);font-weight:900;letter-spacing:1px;line-height:1.2;
+  background:linear-gradient(120deg,#ffffff 20%,#9ec8ff 60%,#7dd8ff 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.page-sub{margin-top:14px;color:var(--text-2);font-size:15px}
+/* ===== 步骤时间线 ===== */
+.steps{display:grid;gap:18px;max-width:760px;margin:0 auto}
+.step{
+  display:grid;grid-template-columns:64px 1fr;gap:20px;
+  background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);
+  padding:22px 26px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .35s var(--ease),border-color .35s;
+}
+.step:hover{transform:translateY(-4px);border-color:rgba(120,160,255,.35)}
+.step-num{
+  width:52px;height:52px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:21px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 8px 24px rgba(45,125,255,.4);
+}
+.step-body h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.step-body p{font-size:14px;color:var(--text-2);line-height:1.75}
+.step-body strong{color:var(--text);font-weight:700}
+/* ===== 下载条 ===== */
+.dl-strip{
+  max-width:760px;margin:40px auto 0;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  background:var(--card);border:1px solid rgba(120,160,255,.25);border-radius:var(--radius);
+  padding:20px 26px;flex-wrap:wrap;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.dl-strip .txt{color:var(--text-2);font-size:14px}
+.dl-strip .txt strong{color:var(--text)}
+.dl-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+  color:#fff;text-decoration:none;font-weight:700;font-size:15px;
+  padding:13px 26px;border-radius:12px;
+  box-shadow:0 10px 28px rgba(37,99,235,.4),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.dl-btn:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(37,99,235,.5)}
+.dl-btn svg{width:18px;height:18px}
+/* ===== 常见问题 ===== */
+.faqs{display:grid;gap:14px;max-width:760px;margin:0 auto;padding-bottom:20px}
+.faq{
+  background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);
+  padding:20px 24px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.faq h3{font-size:15px;font-weight:700;color:var(--cyan);margin-bottom:6px}
+.faq p{font-size:14px;color:var(--text-2);line-height:1.75}
+/* ===== 返回 ===== */
+.back-row{text-align:center;padding:48px 0 20px}
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--cyan);text-decoration:none;font-weight:700;font-size:15px;
+  padding:12px 26px;border:1px solid rgba(56,189,248,.4);border-radius:12px;
+  transition:background .3s,transform .3s var(--ease);
+}
+.back-link:hover{background:rgba(56,189,248,.14);transform:translateX(-4px)}
+footer{
+  position:relative;z-index:1;
+  max-width:1080px;margin:0 auto;
+  padding:48px 28px 40px;text-align:center;
+  color:var(--text-3);font-size:13px;line-height:2;
+}
+footer .sep{color:var(--card-line);padding:0 8px}
+.toast{
+  position:fixed;left:50%;bottom:34px;z-index:99;
+  transform:translate(-50%,20px);
+  background:rgba(14,24,46,.92);border:1px solid rgba(120,160,255,.3);
+  color:var(--text);font-size:14px;font-weight:500;
+  padding:13px 26px;border-radius:12px;
+  box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  max-width:86vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:560px){
+  .nav{padding:18px 20px 0}
+  main{padding:44px 20px 0}
+  .step{grid-template-columns:48px 1fr;gap:16px;padding:20px}
+  .step-num{width:44px;height:44px;font-size:18px}
+  .dl-strip{justify-content:center;text-align:center;padding:22px 20px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-grad"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="bg-grid"></div>
+  <div class="stars" id="stars"></div>
+</div>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="brand-mark"></span>PCL2</a>
+  <nav class="nav-links">
+    <a class="nav-link" href="index.html">首页</a>
+    <a class="nav-link active" href="PCL2使用说明.html">使用说明</a>
+  </nav>
+</header>
+
+<main>
+  <div class="page-head">
+    <h1 class="page-title">PCL2 使用说明</h1>
+    <p class="page-sub">下载 · 安装 · 登录 · 启动，四步搞定你的我的世界</p>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>下载启动器</h3>
+        <p>点击本页下方的蓝色按钮，将 <strong>Plain Craft Launcher 2.exe</strong> 保存到电脑任意位置（建议放在专门文件夹）。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>双击运行</h3>
+        <p>PCL2 是绿色软件，<strong>无需安装</strong>。直接双击 exe 文件即可打开，第一次启动时稍等片刻即可进入主界面。（如果发现PCL2自动更新，请查看"5"）</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>登录账户</h3>
+        <p>在主界面左侧登录微软账户，或使用离线模式直接开始游戏。两者可随时切换。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>选择版本并启动</h3>
+        <p>在「版本列表」选择要玩的游戏版本与加载器，点击启动，等待下载完成后即可进入游戏。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dl-strip">
+    <div class="txt">还没下载启动器？<br><strong>版本 2.14.0.0 · 文件 5.5 MB</strong></div>
+    <a class="dl-btn" id="dlBtn2" href="Plain Craft Launcher 2.exe" download="Plain Craft Launcher 2.exe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+      下载Plain Craft Launcher 2 v2.14.0.0
+    </a>
+  </div>
+
+  <div class="page-head" style="padding-bottom:28px">
+    <h2 class="page-title" style="font-size:clamp(1.3rem,4vw,1.8rem)">常见问题</h2>
+  </div>
+  <div class="faqs">
+    <div class="faq">
+      <h3>下载后杀毒软件提示怎么办？</h3>
+      <p>PCL2 为开源免费软件，部分杀毒软件可能误报。可将文件加入白名单后运行，或从官方渠道核验文件来源。</p>
+    </div>
+    <div class="faq">
+      <h3>启动游戏时一直卡在下载？</h3>
+      <p>游戏本体需要联网下载，请确认网络畅通；可尝试更换下载源或使用加速服务后重试。如果依然不行，请看"5"</p>
+  </div>
+  <div class="back-row">
+    <a class="back-link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg> 返回下载首页</a>
+  </div>
+</main>
+
+<footer>
+  <p>Plain Craft Launcher 2 · PCL2 2.14.0.0</p>
+  <p>本页面提供的启动器文件仅供个人学习与使用</p>
+</footer>
+
+<div class="toast" id="toast">下载已开始，请查看浏览器下载列表</div>
+
+<script>
+(function(){
+  var starsWrap = document.getElementById('stars');
+  var count = window.innerWidth < 560 ? 34 : 64;
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < count; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    var size = Math.random() * 2.2 + 0.8;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.top = (Math.random() * 100) + '%';
+    s.style.setProperty('--d', (Math.random() * 4 + 2).toFixed(2) + 's');
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    frag.appendChild(s);
+  }
+  starsWrap.appendChild(frag);
+
+  var btn = document.getElementById('dlBtn2');
+  var toast = document.getElementById('toast');
+  var timer = null;
+  btn.addEventListener('click', function(){
+    toast.classList.add('show');
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  });
+})();
+</script>
+</body>
+</html>

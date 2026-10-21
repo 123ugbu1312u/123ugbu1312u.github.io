@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCL2 2.14.0.0下载 · Plain Craft Launcher 2</title>
+<meta name="description" content="PCL2 2.14.0.0 下载页：Plain Craft Launcher 2 我的世界启动器，免费开源、轻量快捷。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Crect x='16' y='16' width='32' height='32' rx='8' fill='%2338bdf8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;display=swap">
+<style>
+:root{
+  --bg-0:#070b16;
+  --bg-1:#0b1226;
+  --bg-2:#0d1b33;
+  --blue:#2d7dff;
+  --blue-2:#3b82f6;
+  --cyan:#38bdf8;
+  --violet:#7c6cf0;
+  --text:#eaf0ff;
+  --text-2:#a2b3d8;
+  --text-3:#6d7ea6;
+  --card:rgba(20,32,58,.55);
+  --card-line:rgba(120,160,255,.14);
+  --radius:16px;
+  --shadow:0 18px 50px rgba(2,6,20,.45);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:linear-gradient(165deg,var(--bg-0) 0%,var(--bg-1) 48%,var(--bg-2) 100%);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+/* ===== 背景层 ===== */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(60% 45% at 50% -5%, rgba(45,125,255,.22), transparent 70%),
+    radial-gradient(40% 35% at 85% 20%, rgba(56,189,248,.12), transparent 70%),
+    radial-gradient(45% 40% at 12% 75%, rgba(124,108,240,.14), transparent 70%);
+}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;
+  will-change:transform;
+}
+.orb-1{width:560px;height:560px;left:-140px;top:-120px;background:radial-gradient(circle at 35% 35%,rgba(45,125,255,.55),rgba(45,125,255,0) 70%);animation:drift1 34s var(--ease) infinite alternate}
+.orb-2{width:520px;height:520px;right:-160px;top:22%;background:radial-gradient(circle at 60% 40%,rgba(56,189,248,.45),rgba(56,189,248,0) 70%);animation:drift2 42s var(--ease) infinite alternate}
+.orb-3{width:600px;height:600px;left:8%;bottom:-240px;background:radial-gradient(circle at 50% 40%,rgba(124,108,240,.42),rgba(124,108,240,0) 70%);animation:drift3 50s var(--ease) infinite alternate}
+@keyframes drift1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(90px,70px,0) scale(1.12)}}
+@keyframes drift2{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-80px,-60px,0) scale(.92)}}
+@keyframes drift3{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(60px,-90px,0) scale(1.1)}}
+.bg-grid{
+  position:absolute;inset:-2px;
+  background:
+    repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(90deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px);
+  animation:gridMove 60s linear infinite;
+  mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+}
+@keyframes gridMove{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
+.star{
+  position:absolute;border-radius:50%;background:#cfe4ff;opacity:0;
+  animation:twinkle var(--d) ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:0}to{opacity:.9}}
+/* ===== 导航 ===== */
+.nav{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:22px 28px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:900;font-size:20px;letter-spacing:.5px}
+.brand-mark{
+  width:26px;height:26px;border-radius:7px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 0 18px rgba(45,125,255,.55);
+  display:inline-block;
+  transition:transform .35s var(--ease);
+}
+.brand:hover .brand-mark{transform:rotate(12deg) scale(1.06)}
+.nav-links{display:flex;gap:22px}
+.nav-link{color:var(--text-2);text-decoration:none;font-size:15px;font-weight:500;position:relative;padding:6px 2px;transition:color .25s}
+.nav-link::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-link:hover{color:var(--text)}
+.nav-link:hover::after,.nav-link.active::after{transform:scaleX(1)}
+.nav-link.active{color:var(--text)}
+/* ===== 主区 ===== */
+main{position:relative;z-index:1}
+.hero{
+  min-height:100svh;
+  display:flex;flex-direction:column;
+  max-width:1080px;margin:0 auto;padding:0 28px;
+}
+.hero-title-area{
+  padding-top:min(15vh,150px);
+  text-align:center;
+  animation:rise .9s var(--ease) both;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--cyan);font-size:13px;font-weight:700;letter-spacing:3px;
+  margin-bottom:18px;
+}
+.eyebrow::before,.eyebrow::after{content:"";width:22px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan))}
+.eyebrow::after{background:linear-gradient(90deg,var(--cyan),transparent)}
+.hero-title{
+  font-size:clamp(2.2rem,7vw,4.6rem);
+  font-weight:900;letter-spacing:1px;line-height:1.15;
+  background:linear-gradient(120deg,#ffffff 20%,#9ec8ff 60%,#7dd8ff 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  text-shadow:0 0 60px rgba(45,125,255,.25);
+}
+.hero-sub{margin-top:16px;color:var(--text-2);font-size:clamp(.95rem,2.4vw,1.15rem);font-weight:500}
+.hero-cta-area{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:22px;padding-bottom:9vh;
+  animation:rise .9s .15s var(--ease) both;
+}
+.download-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:20px 44px;
+  border-radius:16px;
+  background:
+    linear-gradient(105deg, transparent 42%, rgba(255,255,255,.32) 50%, transparent 58%) -150% 0/260% 100% no-repeat,
+    linear-gradient(135deg,#2563eb 0%,#3b82f6 55%,#4f9cf8 100%);
+  color:#fff;text-decoration:none;
+  font-size:clamp(1rem,2.6vw,1.28rem);font-weight:700;letter-spacing:.5px;
+  box-shadow:0 14px 40px rgba(37,99,235,.45),inset 0 1px 0 rgba(255,255,255,.25);
+  position:relative;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  cursor:pointer;user-select:none;
+  animation:btnShine 3.4s ease-in-out infinite;
+}
+@keyframes btnShine{
+  0%{background-position:-150% 0, 0 0}
+  55%{background-position:250% 0, 0 0}
+  100%{background-position:250% 0, 0 0}
+}
+.download-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 22px 55px rgba(37,99,235,.6),inset 0 1px 0 rgba(255,255,255,.3)}
+.download-btn:active{transform:translateY(-1px) scale(.99)}
+.download-btn svg{width:26px;height:26px;flex:none}
+.download-btn span{min-width:0;text-align:center}
+.hero-meta{
+  color:var(--text-3);font-size:13px;letter-spacing:.4px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;
+}
+.hero-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--text-3);display:inline-block}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+/* ===== 特性区 ===== */
+.section{max-width:1080px;margin:0 auto;padding:88px 28px 40px}
+.section-head{text-align:center;margin-bottom:44px}
+.section-head h2{font-size:clamp(1.6rem,4.5vw,2.3rem);font-weight:900;letter-spacing:1px}
+.section-head p{color:var(--text-2);margin-top:10px;font-size:15px}
+.card-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--card-line);
+  border-radius:var(--radius);
+  padding:26px 22px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  transition:transform .35s var(--ease),border-color .35s,box-shadow .35s;
+}
+.card:hover{transform:translateY(-6px);border-color:rgba(120,160,255,.35);box-shadow:var(--shadow)}
+.card-icon{
+  width:46px;height:46px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+  background:linear-gradient(135deg,rgba(45,125,255,.18),rgba(56,189,248,.12));
+  border:1px solid rgba(120,160,255,.22);
+}
+.card-icon svg{width:24px;height:24px;stroke:var(--cyan)}
+.card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.card p{font-size:14px;color:var(--text-2);line-height:1.7}
+/* ===== 说明入口 ===== */
+.guide-cta{
+  max-width:1080px;margin:56px auto 0;padding:0 28px;
+}
+.guide-box{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);
+  padding:34px 38px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  flex-wrap:wrap;
+}
+.guide-box h3{font-size:20px;font-weight:700}
+.guide-box p{color:var(--text-2);font-size:14px;margin-top:6px}
+.guide-link{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--cyan);text-decoration:none;font-weight:700;font-size:15px;
+  padding:12px 24px;border:1px solid rgba(56,189,248,.4);border-radius:12px;
+  transition:background .3s,color .3s,transform .3s var(--ease);
+  flex:none;
+}
+.guide-link:hover{background:rgba(56,189,248,.14);transform:translateX(4px)}
+/* ===== 页脚 ===== */
+footer{
+  position:relative;z-index:1;
+  max-width:1080px;margin:0 auto;
+  padding:64px 28px 40px;text-align:center;
+  color:var(--text-3);font-size:13px;line-height:2;
+}
+footer .sep{color:var(--card-line);padding:0 8px}
+/* ===== Toast ===== */
+.toast{
+  position:fixed;left:50%;bottom:34px;z-index:99;
+  transform:translate(-50%,20px);
+  background:rgba(14,24,46,.92);border:1px solid rgba(120,160,255,.3);
+  color:var(--text);font-size:14px;font-weight:500;
+  padding:13px 26px;border-radius:12px;
+  box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  max-width:86vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+/* ===== 响应式 ===== */
+@media (max-width:900px){
+  .card-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .card-grid{grid-template-columns:1fr}
+  .nav{padding:18px 20px 0}
+  .hero-title-area{padding-top:12vh}
+  .download-btn{padding:16px 24px;width:100%;justify-content:center;text-align:center;font-size:15px}
+  .hero{padding:0 20px}
+  .section{padding:64px 20px 32px}
+  .guide-box{padding:26px 24px;justify-content:center;text-align:center}
+  .hero-cta-area{gap:18px;padding-bottom:7vh}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 背景 ===== -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-grad"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="bg-grid"></div>
+  <div class="stars" id="stars"></div>
+</div>
+
+<!-- ===== 导航 ===== -->
+<header class="nav">
+  <a class="brand" href="index.html"><span class="brand-mark"></span>PCL2</a>
+  <nav class="nav-links">
+    <a class="nav-link active" href="index.html">首页</a>
+    <a class="nav-link" href="PCL2使用说明.html">使用说明</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-title-area">
+      <span class="eyebrow">Plain Craft Launcher 2</span>
+      <h1 class="hero-title">PCL2 2.14.0.0下载</h1>
+      <p class="hero-sub">轻量 · 免费 · 开源的我的世界启动器，简洁界面，一键启动</p>
+    </div>
+    <div class="hero-cta-area">
+      <a class="download-btn" id="downloadBtn" href="Plain Craft Launcher 2.exe" download="Plain Craft Launcher 2.exe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+        <span>下载Plain Craft Launcher 2 v2.14.0.0</span>
+      </a>
+      <p class="hero-meta">文件大小 5.5 MB <span class="dot"></span> 更新于 2026-10-19 <span class="dot"></span> 绿色软件 无需安装</p>
+    </div>
+  </section>
+
+  <!-- ===== 特性 ===== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>为什么选择 PCL2？</h2>
+      <p>一个属于玩家自己的启动器</p>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <h3>启动迅速</h3>
+        <p>多线程下载、有内存优化，进游戏快人一步，老电脑也能流畅运行。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 15h4"/></svg></div>
+        <h3>界面清爽</h3>
+        <p>扁平化的简洁设计，布局清晰不臃肿，一眼就能找到想要的功能。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>全面支持</h3>
+        <p>原版、Forge、Fabric、NeoForge、OptiFine 等加载器与版本随心切换。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 010 18"/><path d="M12 3a15 15 0 000 18"/></svg></div>
+        <h3>免费开源</h3>
+        <p>由龙腾猫跃制作，完全免费，代码开源，没有广告和捆绑安装。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 使用说明入口 ===== -->
+  <section class="guide-cta">
+    <div class="guide-box">
+      <div>
+        <h3>第一次使用？</h3>
+        <p>查看下载、安装与启动的完整步骤，三分钟轻松上手。</p>
+      </div>
+      <a class="guide-link" href="PCL2使用说明.html">打开使用说明 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Plain Craft Launcher 2 · PCL2 2.14.0.0</p>
+  <p>本页面提供的启动器文件为转载文件，非原创！<span class="sep">|</span>如遇下载问题请刷新页面重试</p>
+</footer>
+
+<div class="toast" id="toast">下载已开始，请查看浏览器下载列表</div>
+
+<script>
+(function(){
+  // 粒子星空
+  var starsWrap = document.getElementById('stars');
+  var count = window.innerWidth < 560 ? 34 : 64;
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < count; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    var size = Math.random() * 2.2 + 0.8;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.top = (Math.random() * 100) + '%';
+    s.style.setProperty('--d', (Math.random() * 4 + 2).toFixed(2) + 's');
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    frag.appendChild(s);
+  }
+  starsWrap.appendChild(frag);
+
+  // 下载反馈
+  var btn = document.getElementById('downloadBtn');
+  var toast = document.getElementById('toast');
+  var timer = null;
+  btn.addEventListener('click', function(){
+    toast.classList.add('show');
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function(){ toast.classList.remove('show'); }, 3200);
+  });
+})();
+</script>
+</body>
+</html>
