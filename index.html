@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoatMinecraft的资源库</title>
+<meta name="description" content="BoatMinecraft 的 Minecraft 资源库，收录 Plain Craft Launcher 2 旧版本下载等资源。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Crect x='16' y='16' width='32' height='32' rx='8' fill='%2338bdf8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&amp;display=swap">
+<style>
+:root{
+  --bg-0:#070b16;
+  --bg-1:#0b1226;
+  --bg-2:#0d1b33;
+  --blue:#2d7dff;
+  --cyan:#38bdf8;
+  --violet:#7c6cf0;
+  --text:#eaf0ff;
+  --text-2:#a2b3d8;
+  --text-3:#6d7ea6;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:linear-gradient(165deg,var(--bg-0) 0%,var(--bg-1) 48%,var(--bg-2) 100%);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+/* ===== 背景层 ===== */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(60% 45% at 50% -5%, rgba(45,125,255,.22), transparent 70%),
+    radial-gradient(40% 35% at 85% 20%, rgba(56,189,248,.12), transparent 70%),
+    radial-gradient(45% 40% at 12% 75%, rgba(124,108,240,.14), transparent 70%);
+}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;
+  will-change:transform;
+}
+.orb-1{width:560px;height:560px;left:-140px;top:-120px;background:radial-gradient(circle at 35% 35%,rgba(45,125,255,.55),rgba(45,125,255,0) 70%);animation:drift1 34s var(--ease) infinite alternate}
+.orb-2{width:520px;height:520px;right:-160px;top:22%;background:radial-gradient(circle at 60% 40%,rgba(56,189,248,.45),rgba(56,189,248,0) 70%);animation:drift2 42s var(--ease) infinite alternate}
+.orb-3{width:600px;height:600px;left:8%;bottom:-240px;background:radial-gradient(circle at 50% 40%,rgba(124,108,240,.42),rgba(124,108,240,0) 70%);animation:drift3 50s var(--ease) infinite alternate}
+@keyframes drift1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(90px,70px,0) scale(1.12)}}
+@keyframes drift2{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-80px,-60px,0) scale(.92)}}
+@keyframes drift3{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(60px,-90px,0) scale(1.1)}}
+.bg-grid{
+  position:absolute;inset:-2px;
+  background:
+    repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(90deg, rgba(120,160,255,.05) 0 1px, transparent 1px 56px);
+  animation:gridMove 60s linear infinite;
+  mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image:radial-gradient(75% 65% at 50% 40%, #000 30%, transparent 100%);
+}
+@keyframes gridMove{from{background-position:0 0,0 0}to{background-position:56px 56px,56px 56px}}
+.star{
+  position:absolute;border-radius:50%;background:#cfe4ff;opacity:0;
+  animation:twinkle var(--d) ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:0}to{opacity:.9}}
+/* ===== 主区 ===== */
+.stage{
+  position:relative;z-index:1;
+  min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:52px;
+  padding:0 26px 13vh;
+  text-align:center;
+}
+.hero-title{
+  font-size:clamp(1.75rem,5.6vw,4.1rem);
+  font-weight:900;letter-spacing:1px;line-height:1.22;
+  background:linear-gradient(120deg,#ffffff 20%,#9ec8ff 60%,#7dd8ff 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  text-shadow:0 0 60px rgba(45,125,255,.25);
+  animation:rise .9s var(--ease) both;
+}
+.pill-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 32px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#dcefff 0%,#b7dcff 55%,#a4d3ff 100%);
+  color:#0d3b66;text-decoration:none;
+  font-size:clamp(.9rem,2.2vw,1rem);font-weight:700;letter-spacing:.3px;
+  border:1px solid rgba(190,225,255,.85);
+  box-shadow:0 12px 32px rgba(120,190,255,.28),inset 0 1px 0 rgba(255,255,255,.75);
+  transition:transform .32s var(--ease),box-shadow .32s var(--ease),background .32s var(--ease);
+  animation:rise .9s .18s var(--ease) both;
+  cursor:pointer;user-select:none;
+}
+.pill-btn:hover{
+  transform:translateY(-3px);
+  background:linear-gradient(135deg,#eaf6ff 0%,#c9e6ff 55%,#b3dbff 100%);
+  box-shadow:0 18px 44px rgba(140,200,255,.4),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.pill-btn:active{transform:translateY(-1px) scale(.99)}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:560px){
+  .stage{gap:40px;padding-bottom:10vh}
+}
+@media (prefers-reduced-motion:reduce){
+  .orb,.bg-grid,.pill-btn{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 背景 ===== -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-grad"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="bg-grid"></div>
+  <div class="stars" id="stars"></div>
+</div>
+
+<!-- ===== 主区 ===== -->
+<main class="stage">
+  <h1 class="hero-title">BoatMinecraft的Minecraft资源库</h1>
+  <a class="pill-btn" href="PCLDownload/">PlainCraftLauncher2旧版本下载</a>
+</main>
+
+<script>
+(function(){
+  // 粒子星空
+  var starsWrap = document.getElementById('stars');
+  var count = window.innerWidth < 560 ? 34 : 64;
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < count; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    var size = Math.random() * 2.2 + 0.8;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.top = (Math.random() * 100) + '%';
+    s.style.setProperty('--d', (Math.random() * 4 + 2).toFixed(2) + 's');
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's';
+    frag.appendChild(s);
+  }
+  starsWrap.appendChild(frag);
+})();
+</script>
+</body>
+</html>
