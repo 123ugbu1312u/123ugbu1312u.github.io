@@ -82,6 +82,10 @@ body{
   text-shadow:0 0 60px rgba(45,125,255,.25);
   animation:rise .9s var(--ease) both;
 }
+.actions{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+.actions .pill-btn:nth-child(2){animation-delay:.32s}
 .pill-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:13px 32px;
@@ -125,7 +129,10 @@ body{
 <!-- ===== 主区 ===== -->
 <main class="stage">
   <h1 class="hero-title">BoatMinecraft的Minecraft资源库</h1>
-  <a class="pill-btn" href="PCLDownload/">PlainCraftLauncher2旧版本下载</a>
+  <div class="actions">
+    <a class="pill-btn" href="PCLDownload/">PlainCraftLauncher2旧版本下载</a>
+    <a class="pill-btn" href="minigames/">游玩小游戏</a>
+  </div>
 </main>
 
 <script>

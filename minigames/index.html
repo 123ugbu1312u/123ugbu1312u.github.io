@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>霓虹破砖 Neon Breaker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#07080f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no, email=no, address=no">
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2307080f'/%3E%3Crect x='4' y='6' width='10' height='6' rx='1.6' fill='%2300f0ff'/%3E%3Crect x='18' y='6' width='10' height='6' rx='1.6' fill='%23b46cff'/%3E%3Crect x='4' y='15' width='10' height='6' rx='1.6' fill='%23ff5ea8'/%3E%3Crect x='18' y='15' width='10' height='6' rx='1.6' fill='%23ffb03a'/%3E%3Crect x='11' y='25' width='10' height='3.2' rx='1.6' fill='%2300f0ff'/%3E%3C/svg%3E">
+<style>
+    :root {
+        --nb-bg: #05060a;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--nb-bg);
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        position: fixed;
+        inset: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        cursor: default;
+    }
+
+    /* 全屏画布：1280x800 逻辑画面由 game.js 等比缩放居中并留黑边，不裁切 */
+    #game {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        outline: none;
+        background: var(--nb-bg);
+        image-rendering: auto;
+    }
+
+    /* 自动下载被拦截时的兜底按钮（平时完全隐藏，不参与布局与命中） */
+    #nb-save-replay {
+        position: fixed;
+        left: 50%;
+        bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+        transform: translateX(-50%);
+        z-index: 10;
+        display: none;
+        padding: 10px 22px;
+        border: 1.5px solid rgba(0, 240, 255, 0.75);
+        border-radius: 999px;
+        background: rgba(8, 14, 26, 0.88);
+        color: #d8fbff;
+        font: 600 14px/1 "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        letter-spacing: 0.06em;
+        box-shadow: 0 0 14px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.12);
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    #nb-save-replay.show { display: block; }
+    #nb-save-replay:active { background: rgba(0, 240, 255, 0.18); }
+</style>
+</head>
+<body>
+<canvas id="game" width="1280" height="800" tabindex="0"></canvas>
+<button id="nb-save-replay" type="button">保存回放</button>
+
+<!-- 按依赖顺序加载：经典 script，非 ES Module。render 依赖 meta（运行期读设置，缺失有默认值） -->
+<script src="js/core.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/render.js"></script>
+<script src="js/meta.js"></script>
+<script src="js/draw.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/pauseitems.js"></script>
+<script src="js/replay.js"></script>
+<script src="js/game.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    var canvas = document.getElementById('game');
+
+    // 1) 启动游戏（对应 C# Program.Main → GameForm 构造函数）
+    try {
+        if (window.NB && NB.Game && typeof NB.Game.init === 'function') {
+            NB.Game.init(canvas);
+        }
+    } catch (err) {
+        // 启动失败不阻塞页面，错误留在控制台便于排查
+        if (window.console) console.error('[NeonBreaker] init failed:', err);
+    }
+
+    // 2) 首次用户交互时解锁音频（Web Audio 自动播放策略）
+    var unlocked = false;
+    function unlockAudio() {
+        if (unlocked) return;
+        unlocked = true;
+        try { if (window.NB && NB.Sfx && typeof NB.Sfx.init === 'function') NB.Sfx.init(); } catch (e) { }
+        try { if (window.NB && NB.Music && typeof NB.Music.apply === 'function') NB.Music.apply(); } catch (e2) { }
+        window.removeEventListener('pointerdown', unlockAudio, true);
+        window.removeEventListener('touchstart', unlockAudio, true);
+        window.removeEventListener('keydown', unlockAudio, true);
+        window.removeEventListener('mousedown', unlockAudio, true);
+    }
+    window.addEventListener('pointerdown', unlockAudio, true);
+    window.addEventListener('touchstart', unlockAudio, true);
+    window.addEventListener('keydown', unlockAudio, true);
+    window.addEventListener('mousedown', unlockAudio, true);
+
+    // 3) 回放兜底下载按钮：仅当自动下载被拦截且已有录制文件时出现
+    var btn = document.getElementById('nb-save-replay');
+    if (btn) {
+        btn.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            try {
+                if (window.NB && NB.Replay && typeof NB.Replay.saveLast === 'function') NB.Replay.saveLast();
+            } catch (e) { }
+            btn.classList.remove('show');
+        });
+        setInterval(function () {
+            var r = window.NB && NB.Replay;
+            var show = !!(r && r._needSave && r.lastFile);
+            if (show !== btn.classList.contains('show')) btn.classList.toggle('show', show);
+        }, 1000);
+    }
+
+    // 4) 防止移动端页面级滚动 / 双击缩放（画布内事件由 game.js 自行处理）
+    document.addEventListener('touchmove', function (e) {
+        if (e.touches && e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('gesturestart', function (e) { e.preventDefault(); }, { passive: false });
+    window.addEventListener('beforeunload', function () {
+        try { if (window.NB && NB.Replay && NB.Replay.active) NB.Replay.stop(); } catch (e) { }
+    });
+})();
+</script>
+</body>
+</html>
